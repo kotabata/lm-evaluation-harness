@@ -84,6 +84,7 @@ class HuggingFaceAutoLM(BaseLM):
         device: Optional[Union[int, str]] = "cuda",
         peft: str = None,
         load_in_8bit: Optional[bool] = False,
+        load_in_4bit: Optional[bool] = False,
         trust_remote_code: Optional[bool] = False,
         use_fast: Optional[bool] = True
     ):
@@ -188,6 +189,7 @@ class HuggingFaceAutoLM(BaseLM):
                 offload_folder,
             )
         model_kwargs["load_in_8bit"] = load_in_8bit
+        model_kwargs["load_in_4bit"] = load_in_4bit
         self.model = self._create_auto_model(
             pretrained=pretrained,
             trust_remote_code=trust_remote_code,
@@ -215,7 +217,7 @@ class HuggingFaceAutoLM(BaseLM):
             # the user specified one so we force `self._device` to be the same as
             # `lm_head`'s.
             self._device = self.model.hf_device_map["lm_head"]
-        if not use_accelerate and not load_in_8bit:
+        if not use_accelerate and (not load_in_8bit and not load_in_4bit):
             try:
                 self.model.to(self._device)
             except:
@@ -231,6 +233,7 @@ class HuggingFaceAutoLM(BaseLM):
         max_memory: Optional[dict] = None,
         offload_folder: Optional[str] = None,
         load_in_8bit: Optional[bool] = False,
+        load_in_4bit: Optional[bool] = False,
         trust_remote_code: Optional[bool] = False,
         torch_dtype: Optional[Union[str, torch.dtype]] = None,
     ) -> transformers.AutoModel:
@@ -242,6 +245,7 @@ class HuggingFaceAutoLM(BaseLM):
             max_memory=max_memory,
             offload_folder=offload_folder,
             load_in_8bit=load_in_8bit,
+            load_in_4bit=load_in_4bit,
             trust_remote_code=trust_remote_code,
             torch_dtype=torch_dtype,
         )
@@ -258,6 +262,7 @@ class HuggingFaceAutoLM(BaseLM):
         max_memory: Optional[dict] = None,
         offload_folder: Optional[str] = None,
         load_in_8bit: Optional[bool] = False,
+        load_in_4bit: Optional[bool] = False,
         trust_remote_code: Optional[bool] = False,
         torch_dtype: Optional[Union[str, torch.dtype]] = None,
     ):
@@ -269,6 +274,7 @@ class HuggingFaceAutoLM(BaseLM):
             max_memory=max_memory,
             offload_folder=offload_folder,
             load_in_8bit=load_in_8bit,
+            load_in_4bit=load_in_4bit,
             trust_remote_code=trust_remote_code,
             torch_dtype=torch_dtype,
         )
@@ -389,7 +395,7 @@ class HuggingFaceAutoLM(BaseLM):
                 isinstance(max_generation_length, int) or max_generation_length is None
             )
             assert isinstance(stop_sequences, list) or stop_sequences is None
-            
+
             # TODO: Find a better way to handle stop sequences for 0-shot.
             if stop_sequences is None:
                 until = [self.eot_token]

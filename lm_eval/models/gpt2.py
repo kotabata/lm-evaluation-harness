@@ -17,6 +17,7 @@ class HFLM(BaseLM):
         tokenizer=None,
         batch_size=1,
         load_in_8bit: Optional[bool] = False,
+        load_in_4bit: Optional[bool] = False,
         trust_remote_code: Optional[bool] = False,
         use_fast: Optional[bool] = True
     ):
@@ -46,13 +47,14 @@ class HFLM(BaseLM):
         self.gpt2 = transformers.AutoModelForCausalLM.from_pretrained(
             pretrained,
             load_in_8bit=load_in_8bit,
+            load_in_4bit=load_in_4bit,
             low_cpu_mem_usage=low_cpu_mem_usage,
             torch_dtype=torch_dtype,
             device_map=device_map,
             revision=revision,
             trust_remote_code=trust_remote_code,
         ).eval()
-        if not load_in_8bit:
+        if not load_in_8bit and not load_in_4bit:
             try:
                 self.gpt2.to(self.device)
             except:
@@ -120,9 +122,9 @@ class HFLM(BaseLM):
     def _model_generate(self, context, max_length, eos_token_id):
         return self.gpt2.generate(
             context,
-            max_length=max_length, 
-            eos_token_id=eos_token_id, 
-            pad_token_id=eos_token_id, 
+            max_length=max_length,
+            eos_token_id=eos_token_id,
+            pad_token_id=eos_token_id,
             do_sample=False
         )
 

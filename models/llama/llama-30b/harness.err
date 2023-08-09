@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/home/acd14228ou/lm-evaluation-harness/main.py", line 122, in <module>
+    main()
+  File "/home/acd14228ou/lm-evaluation-harness/main.py", line 91, in main
+    results = evaluator.simple_evaluate(
+  File "/home/acd14228ou/lm-evaluation-harness/lm_eval/utils.py", line 185, in _wrapper
+    return fn(*args, **kwargs)
+  File "/home/acd14228ou/lm-evaluation-harness/lm_eval/evaluator.py", line 65, in simple_evaluate
+    lm = lm_eval.models.get_model(model).create_from_arg_string(
+  File "/home/acd14228ou/lm-evaluation-harness/lm_eval/base.py", line 116, in create_from_arg_string
+    return cls(**args, **args2)
+  File "/home/acd14228ou/lm-evaluation-harness/lm_eval/models/huggingface.py", line 191, in __init__
+    self.model = self._create_auto_model(
+  File "/home/acd14228ou/lm-evaluation-harness/lm_eval/models/huggingface.py", line 238, in _create_auto_model
+    model = self.AUTO_MODEL_CLASS.from_pretrained(
+  File "/home/acd14228ou/lm-evaluation-harness/work/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 493, in from_pretrained
+    return model_class.from_pretrained(
+  File "/home/acd14228ou/lm-evaluation-harness/work/lib/python3.10/site-packages/transformers/modeling_utils.py", line 2277, in from_pretrained
+    raise ImportError(
+ImportError: Using `load_in_8bit=True` requires Accelerate: `pip install accelerate` and the latest version of bitsandbytes `pip install -i https://test.pypi.org/simple/ bitsandbytes` or pip install bitsandbytes` 

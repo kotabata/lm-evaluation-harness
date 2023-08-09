@@ -1,0 +1,40 @@
+{
+  "results": {
+    "jcommonsenseqa-1.1-0.3": {
+      "acc": 0.5665773011617515,
+      "acc_stderr": 0.014820556451534166,
+      "acc_norm": 0.5746201966041108,
+      "acc_norm_stderr": 0.014786247607132472
+    },
+    "jnli-1.1-0.3": {
+      "acc": 0.5443714050944947,
+      "acc_stderr": 0.01009676117753497,
+      "acc_norm": 0.5213640098603123,
+      "acc_norm_stderr": 0.01012749751679094
+    },
+    "jsquad-1.1-0.3": {
+      "exact_match": 39.26159387663215,
+      "f1": 49.84634356768403
+    }
+  },
+  "versions": {
+    "jcommonsenseqa-1.1-0.3": 1.1,
+    "jnli-1.1-0.3": 1.1,
+    "jsquad-1.1-0.3": 1.1
+  },
+  "config": {
+    "model": "hf-causal",
+    "model_args": "pretrained=rinna/japanese-gpt-neox-3.6b-instruction-ppo,use_fast=False,device_map=auto,torch_dtype=auto",
+    "num_fewshot": [
+      3,
+      3,
+      3
+    ],
+    "batch_size": null,
+    "device": "cuda",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}

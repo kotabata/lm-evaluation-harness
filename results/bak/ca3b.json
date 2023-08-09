@@ -1,0 +1,40 @@
+{
+  "results": {
+    "jcommonsenseqa-1.1-0.3": {
+      "acc": 0.6979445933869526,
+      "acc_stderr": 0.01373197103757537,
+      "acc_norm": 0.613047363717605,
+      "acc_norm_stderr": 0.0145664934444427
+    },
+    "jnli-1.1-0.3": {
+      "acc": 0.3410024650780608,
+      "acc_stderr": 0.009610580035485511,
+      "acc_norm": 0.30608052588331963,
+      "acc_norm_stderr": 0.009343322356118853
+    },
+    "jsquad-1.1-0.3": {
+      "exact_match": 26.722197208464657,
+      "f1": 35.83702427359791
+    }
+  },
+  "versions": {
+    "jcommonsenseqa-1.1-0.3": 1.1,
+    "jnli-1.1-0.3": 1.1,
+    "jsquad-1.1-0.3": 1.1
+  },
+  "config": {
+    "model": "hf-causal",
+    "model_args": "pretrained=cyberagent/open-calm-3b",
+    "num_fewshot": [
+      3,
+      3,
+      3
+    ],
+    "batch_size": null,
+    "device": "cuda",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}
