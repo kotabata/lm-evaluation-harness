@@ -6,7 +6,7 @@ import peft
 from typing import List, Mapping, NewType, Optional, Tuple, Union
 from tqdm import tqdm
 
-from transformers import BatchEncoding
+from transformers import BatchEncoding, BitsAndBytesConfig
 
 from lm_eval import utils
 from lm_eval.base import BaseLM
@@ -238,17 +238,38 @@ class HuggingFaceAutoLM(BaseLM):
         torch_dtype: Optional[Union[str, torch.dtype]] = None,
     ) -> transformers.AutoModel:
         """Returns a pre-trained pytorch model from a pre-trained model configuration."""
-        model = self.AUTO_MODEL_CLASS.from_pretrained(
-            pretrained,
-            revision=revision + ("/" + subfolder if subfolder is not None else ""),
-            device_map=device_map,
-            max_memory=max_memory,
-            offload_folder=offload_folder,
-            load_in_8bit=load_in_8bit,
-            load_in_4bit=load_in_4bit,
-            trust_remote_code=trust_remote_code,
-            torch_dtype=torch_dtype,
-        )
+        if load_in_4bit:
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.float16,
+                bnb_4bit_use_double_quant=True,
+            )
+            print(torch_dtype)
+            model = self.AUTO_MODEL_CLASS.from_pretrained(
+                pretrained,
+                revision=revision + ("/" + subfolder if subfolder is not None else ""),
+                device_map=device_map,
+                max_memory=max_memory,
+                offload_folder=offload_folder,
+                load_in_8bit=load_in_8bit,
+                load_in_4bit=load_in_4bit,
+                trust_remote_code=trust_remote_code,
+                torch_dtype=torch_dtype,
+                quantization_config=bnb_config,
+            )
+        else:
+            model = self.AUTO_MODEL_CLASS.from_pretrained(
+                pretrained,
+                revision=revision + ("/" + subfolder if subfolder is not None else ""),
+                device_map=device_map,
+                max_memory=max_memory,
+                offload_folder=offload_folder,
+                load_in_8bit=load_in_8bit,
+                load_in_4bit=load_in_4bit,
+                trust_remote_code=trust_remote_code,
+                torch_dtype=torch_dtype,
+            )
         return model
 
     def _create_auto_model_peft(
@@ -266,18 +287,40 @@ class HuggingFaceAutoLM(BaseLM):
         trust_remote_code: Optional[bool] = False,
         torch_dtype: Optional[Union[str, torch.dtype]] = None,
     ):
-        model = self.AUTO_PEFT_CLASS.from_pretrained(
-            model,
-            peft,
-            revision=revision + ("/" + subfolder if subfolder is not None else ""),
-            device_map=device_map,
-            max_memory=max_memory,
-            offload_folder=offload_folder,
-            load_in_8bit=load_in_8bit,
-            load_in_4bit=load_in_4bit,
-            trust_remote_code=trust_remote_code,
-            torch_dtype=torch_dtype,
-        )
+        if load_in_4bit:
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.float16,
+                bnb_4bit_use_double_quant=True,
+            )
+            print(torch_dtype)
+            model = self.AUTO_PEFT_CLASS.from_pretrained(
+                model,
+                peft,
+                revision=revision + ("/" + subfolder if subfolder is not None else ""),
+                device_map=device_map,
+                max_memory=max_memory,
+                offload_folder=offload_folder,
+                load_in_8bit=load_in_8bit,
+                load_in_4bit=load_in_4bit,
+                trust_remote_code=trust_remote_code,
+                torch_dtype=torch_dtype,
+                quantization_config=bnb_config,
+            )
+        else:
+            model = self.AUTO_PEFT_CLASS.from_pretrained(
+                model,
+                peft,
+                revision=revision + ("/" + subfolder if subfolder is not None else ""),
+                device_map=device_map,
+                max_memory=max_memory,
+                offload_folder=offload_folder,
+                load_in_8bit=load_in_8bit,
+                load_in_4bit=load_in_4bit,
+                trust_remote_code=trust_remote_code,
+                torch_dtype=torch_dtype,
+            )
         return model
 
     def _create_auto_tokenizer(

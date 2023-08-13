@@ -1,0 +1,24 @@
+{
+  "results": {
+    "marc_ja-1.1-0.3": {
+      "acc": 0.757516802263884,
+      "acc_stderr": 0.005700296784720381,
+      "acc_norm": 0.757516802263884,
+      "acc_norm_stderr": 0.005700296784720381
+    }
+  },
+  "versions": {
+    "marc_ja-1.1-0.3": 1.1
+  },
+  "config": {
+    "model": "hf-causal",
+    "model_args": "pretrained=rinna/japanese-gpt-neox-3.6b,use_fast=Falseb",
+    "num_fewshot": 3,
+    "batch_size": null,
+    "device": "cuda",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}
