@@ -170,6 +170,8 @@ class HuggingFaceAutoLM(BaseLM):
             revision=revision + ("/" + subfolder if subfolder is not None else ""),
         )
 
+        print(_get_dtype(dtype, self._config))
+
         self._add_special_tokens = add_special_tokens
         self.tokenizer = self._create_auto_tokenizer(
             pretrained=pretrained,
